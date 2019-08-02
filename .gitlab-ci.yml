@@ -7,10 +7,10 @@ variables:
   BUILD_IMAGE_NAME: "$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA"
 
 stages:
-  # - build
-  # - test
-  # - release
   - test-minikube
+  - build
+  - test
+  - release
 
 build:
   stage: build
