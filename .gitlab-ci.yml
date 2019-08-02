@@ -237,7 +237,7 @@ test-kind:
     - |
       bash <<EOF_OUTER
       set -ex
-      docker run -e CI_PROJECT_ID="$CI_PROJECT_ID" -e KUBECONFIG="$(kind get kubeconfig-path)" registry.gitlab.com/gitlab-org/cluster-integration/auto-deploy-image:v0.1.0 bash <<EOF_INNER
+      docker run -e CI_PROJECT_ID="$CI_PROJECT_ID" -e KUBECONFIG="$(kind get kubeconfig-path)" -i registry.gitlab.com/gitlab-org/cluster-integration/auto-deploy-image:v0.1.0 bash <<EOF_INNER
       set -ex
       export GIT_STRATEGY=none
       export CI_APPLICATION_REPOSITORY="registry.gitlab.com/gitlab-org/cluster-integration/auto-build-image/master/test-dockerfile"
