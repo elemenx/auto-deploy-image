@@ -264,5 +264,5 @@ before_script:
     }
 
     function start_minikube() {
-      minikube start --vm-driver=none --bootstrapper=localkube --extra-config=apiserver.Authorization.Mode=RBAC
+      ./minikube start --vm-driver=none --bootstrapper=localkube --extra-config=apiserver.Authorization.Mode=RBAC
     }
