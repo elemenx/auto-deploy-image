@@ -226,6 +226,9 @@ release-tag:
 
 test-minikube:
   stage: test-minikube
+  image: docker:stable
+  services:
+    - docker:stable-dind
   script:
     - download_minikube
     - start_minikube
