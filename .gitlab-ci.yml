@@ -249,13 +249,16 @@ test-kind:
     - install_kind
     - kind create cluster
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+    - apk add bash
     - |
-      docker run --env-file <(env) registry.gitlab.com/gitlab-org/cluster-integration/auto-deploy-image:v0.1.0 bash <<EOF
+      bash <<EOF_OUTER
+      docker run --env-file <(env) registry.gitlab.com/gitlab-org/cluster-integration/auto-deploy-image:v0.1.0 bash <<EOF_INNER
       auto-deploy initialize_tiller
       auto-deploy download_chart
       auto-deploy deploy
       helm ls --host "localhost:44134"
-      EOF
+      EOF_INNER
+      EOF_OUTER
 
 before_script:
   - |
