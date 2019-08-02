@@ -7,9 +7,10 @@ variables:
   BUILD_IMAGE_NAME: "$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA"
 
 stages:
-  - build
-  - test
-  - release
+  # - build
+  # - test
+  # - release
+  - test-minikube
 
 build:
   stage: build
@@ -222,6 +223,13 @@ release-tag:
   only:
     - tags
 
+
+test-minikube:
+  stage: test-minikube
+  script:
+    - download_minikube
+    - start_minikube
+
 before_script:
   - |
     function expected_error() {
@@ -248,4 +256,13 @@ before_script:
 
       export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
       kubectl version
+    }
+
+    function download_minikube() {
+      curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+      chmod +x minikube
+    }
+
+    function start_minikube() {
+      minikube start --vm-driver=none --bootstrapper=localkube --extra-config=apiserver.Authorization.Mode=RBAC
     }
