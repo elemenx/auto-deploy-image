@@ -227,10 +227,12 @@ release-tag:
 test-minikube:
   <<: *test-job
   stage: test-minikube
-  image: "registry.gitlab.com/gitlab-org/cluster-integration/auto-deploy-image:v0.1.0"
+  image: docker:stable
+  services:
+    - docker:stable-dind
   script:
-    - download_minikube
-    - start_minikube
+    - download_kind
+    - kind create cluster
 
 before_script:
   - |
@@ -260,11 +262,7 @@ before_script:
       kubectl version
     }
 
-    function download_minikube() {
-      wget -O minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-      chmod +x minikube
-    }
-
-    function start_minikube() {
-      ./minikube start --vm-driver=none --bootstrapper=localkube --extra-config=apiserver.Authorization.Mode=RBAC
+    function download_kind() {
+      wget -O /usr/local/bin/kind https://github.com/kubernetes-sigs/kind/releases/download/v0.4.0/kind-linux-amd64
+      chmod +x /usr/local/bin/kind
     }
