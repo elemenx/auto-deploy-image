@@ -236,7 +236,9 @@ test-kind:
     - apk add bash
     - |
       bash <<EOF_OUTER
+      set -ex
       docker run -e CI_PROJECT_ID="$CI_PROJECT_ID" -e KUBECONFIG="$(kind get kubeconfig-path)" registry.gitlab.com/gitlab-org/cluster-integration/auto-deploy-image:v0.1.0 bash <<EOF_INNER
+      set -ex
       export GIT_STRATEGY=none
       export CI_APPLICATION_REPOSITORY="registry.gitlab.com/gitlab-org/cluster-integration/auto-build-image/master/test-dockerfile"
       export CI_APPLICATION_TAG="b359d01bc8c611a2f7b14283cc878dea4a5f85d7"
