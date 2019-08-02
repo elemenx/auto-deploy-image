@@ -7,7 +7,7 @@ variables:
   BUILD_IMAGE_NAME: "$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA"
 
 stages:
-  - test-minikube
+  - test-kind
   - build
   - test
   - release
@@ -224,15 +224,38 @@ release-tag:
     - tags
 
 
-test-minikube:
-  <<: *test-job
-  stage: test-minikube
+test-kind:
+  stage: test-kind
   image: docker:stable
   services:
     - docker:stable-dind
+  variables:
+    GIT_STRATEGY: none
+    CI_APPLICATION_REPOSITORY: "registry.gitlab.com/gitlab-org/cluster-integration/auto-build-image/master/test-dockerfile"
+    CI_APPLICATION_TAG: "b359d01bc8c611a2f7b14283cc878dea4a5f85d7"
+    CI_ENVIRONMENT_SLUG: production
+    CI_ENVIRONMENT_URL: example.com
+    CI_PROJECT_PATH_SLUG: "gitlab-org/cluster-integration/auto-build-image"
+    CI_PROJECT_VISIBILITY: public
+    KUBE_NAMESPACE: default
+    KUBE_INGRESS_BASE_DOMAIN: example.com
+    POSTGRES_ENABLED: true
+    POSTGRES_USER: user
+    POSTGRES_PASSWORD: testing-password
+    POSTGRES_ENABLED: "true"
+    POSTGRES_DB: $CI_ENVIRONMENT_SLUG
+    POSTGRES_VERSION: 9.6.2
   script:
-    - download_kind
+    - install_kind
     - kind create cluster
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+    - |
+      docker run --env-file <(env) registry.gitlab.com/gitlab-org/cluster-integration/auto-deploy-image:v0.1.0 bash <<EOF
+      auto-deploy initialize_tiller
+      auto-deploy download_chart
+      auto-deploy deploy
+      helm ls --host "localhost:44134"
+      EOF
 
 before_script:
   - |
@@ -262,7 +285,7 @@ before_script:
       kubectl version
     }
 
-    function download_kind() {
+    function install_kind() {
       wget -O /usr/local/bin/kind https://github.com/kubernetes-sigs/kind/releases/download/v0.4.0/kind-linux-amd64
       chmod +x /usr/local/bin/kind
     }
