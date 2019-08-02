@@ -227,7 +227,7 @@ release-tag:
 test-minikube:
   <<: *test-job
   stage: test-minikube
-  image: auto-deploy-image:v0.1.0
+  image: "registry.gitlab.com/gitlab-org/cluster-integration/auto-deploy-image:v0.1.0"
   script:
     - download_minikube
     - start_minikube
