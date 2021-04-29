@@ -65,9 +65,9 @@ function add_chart_repositories() {
   # helm init --client-only --stable-repo-url=https://mirror.azure.cn/kubernetes/charts/
   helm repo add stable https://apphub.aliyuncs.com/stable/
   # bitnami repository is used for in-cluster PostgreSQL installation.
-  if [[ "$POSTGRES_ENABLED" == "true" ]]; then
+  # if [[ "$POSTGRES_ENABLED" == "true" ]]; then
     # helm repo add bitnami https://charts.bitnami.com/bitnami
-  fi
+  # fi
   # Additionaly, users can specify their custom chart repository.
   add_custom_chart_repository
 }
