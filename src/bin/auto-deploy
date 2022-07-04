@@ -45,8 +45,8 @@ function download_chart() {
       if [[ "$auto_chart_name" != "chart" ]]; then
         mv "$auto_chart_name" chart
       fi
-      sed -i 's/https:\/\/kubernetes-charts.storage.googleapis.com\//https:\/\/apphub.aliyuncs.com\/stable\//g' chart/requirements.lock
-      sed -i 's/https:\/\/kubernetes-charts.storage.googleapis.com\//https:\/\/apphub.aliyuncs.com\/stable\//g' chart/requirements.yaml
+      sed -i 's/https:\/\/kubernetes-charts.storage.googleapis.com\//https:\/\/mirror.azure.cn\/kubernetes\/charts\//g' chart/requirements.lock
+      sed -i 's/https:\/\/kubernetes-charts.storage.googleapis.com\//https:\/\/mirror.azure.cn\/kubernetes\/charts\//g' chart/requirements.yaml
     fi
   else
     echo "Download skipped. Using the default chart included in auto-deploy-image..."
@@ -63,7 +63,7 @@ function download_chart() {
 
 function add_chart_repositories() {
   # helm init --client-only --stable-repo-url=https://mirror.azure.cn/kubernetes/charts/
-  helm repo add stable https://apphub.aliyuncs.com/stable/
+  helm repo add stable https://mirror.azure.cn/kubernetes/charts/
   # bitnami repository is used for in-cluster PostgreSQL installation.
   # if [[ "$POSTGRES_ENABLED" == "true" ]]; then
     # helm repo add bitnami https://charts.bitnami.com/bitnami
