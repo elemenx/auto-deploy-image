@@ -1,12 +1,12 @@
-ARG HELM_INSTALL_IMAGE_VERSION
+ARG HELM_INSTALL_IMAGE_VERSION=v0.274-helm-3.10.2-kube-1.24.8-alpine-3.15
 
 FROM "registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:${HELM_INSTALL_IMAGE_VERSION}"
 
 # https://github.com/sgerrand/alpine-pkg-glibc
-ARG GLIBC_VERSION
+ARG GLIBC_VERSION=2.31-r0
 
 # Magic ARG provided by docker
-ARG TARGETARCH
+ARG TARGETARCH=amd64
 
 # Install shared dependencies
 RUN apk add --no-cache \
