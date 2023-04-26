@@ -14,7 +14,8 @@ RUN apk add --no-cache \
   openssl \
   ruby \
   ruby-json \
-  tar
+  tar \
+  && apk upgrade
 
 # Install legacy glibc dependency on amd64
 RUN curl -sSL -o /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub \
