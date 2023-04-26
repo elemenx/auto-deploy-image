@@ -5,9 +5,6 @@ FROM "registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:${HE
 # https://github.com/sgerrand/alpine-pkg-glibc
 ARG GLIBC_VERSION=2.31-r0
 
-# Magic ARG provided by docker
-ARG TARGETARCH=amd64
-
 # Install shared dependencies
 RUN apk add --no-cache \
   bash \
@@ -20,13 +17,10 @@ RUN apk add --no-cache \
   tar
 
 # Install legacy glibc dependency on amd64
-RUN \
-  if [[ "$TARGETARCH" = "amd64" ]]; then \
-    curl -sSL -o /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub \
+RUN curl -sSL -o /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub \
       && curl -sSL -O https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk \
       && apk add glibc-${GLIBC_VERSION}.apk \
-      && rm glibc-${GLIBC_VERSION}.apk; \
-  fi
+      && rm glibc-${GLIBC_VERSION}.apk
 
 COPY src/ build/
 COPY assets/ assets/
